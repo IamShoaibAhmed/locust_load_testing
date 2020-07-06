@@ -1,5 +1,5 @@
-from locust import HttpUser, TaskSet, task 
-#from locust import ResponseError 
+from locust import HttpLocust, TaskSet, task 
+from locust import ResponseError 
 import json 
 
 
@@ -25,14 +25,17 @@ class UserBehavior(TaskSet):
 										'password': 'ZYT5nsg3565!'}) 
 		
 		return json.loads(response._content)['access'] 
+        
+    @task
+    def get_something(self):
+        self.client.get("/something")    
 
 
 
-class WebsiteUser(HttpUser): 
+class WebsiteUser(HttpLocust): 
 	# The task_set attribute should point 
 	# to a TaskSet class which defines 
 	# the behaviour of the user 
 	task_set = UserBehavior 
 	min_wait = 5000
 	max_wait = 9000
-
