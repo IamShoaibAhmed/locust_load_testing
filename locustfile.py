@@ -1,15 +1,23 @@
-import random
-from locust import HttpUser, task, between
+from locust import HttpUser, between, task
+import json
+import requests
+import sys
 
-class MyUser(HttpUser):
+
+# from odoo-12 import http, _, exceptions
+
+
+class WebsiteUser(HttpUser):
+    wait_time = between(5, 15)
+
+
+    
     @task
     def index(self):
-        self.client.get("/")
-        #self.client.get("")
-    
-    
-    
-    def on_start(self):
-        self.client.post("/web/login", {"username":"admin@amarbay.com", "password":"123"})
+        self.client.get("/web/login")
+        
+    @task
+    def about(self):
+        self.client.get("/pos/web/#action=pos.ui")
 
-    wait_time = between(5, 9)
+    
